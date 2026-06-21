@@ -1,0 +1,248 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="1800" viewBox="0 0 1450 1800">
+  <defs>
+    <style>
+      .text { font: 700 27px Arial, sans-serif; fill: #172033; }
+      .label { font: 700 21px Arial, sans-serif; fill: #172033; }
+      .small { font: 18px Arial, sans-serif; fill: #172033; }
+      .source { fill: #ffffff; stroke: #334155; stroke-width: 4; }
+      .module { fill: #ffffff; stroke: #24558f; stroke-width: 4; }
+      .device { fill: #ffffff; stroke: #334155; stroke-width: 4; }
+      .plus { fill: none; stroke: #e11d2e; stroke-width: 8; }
+      .minus { fill: none; stroke: #111111; stroke-width: 8; }
+      .signal { fill: none; stroke: #eab308; stroke-width: 7; }
+      .pwm { fill: none; stroke: #0891b2; stroke-width: 7; }
+      .red { fill: none; stroke: #dc2626; stroke-width: 6; }
+      .green { fill: none; stroke: #16a34a; stroke-width: 6; }
+      .blue { fill: none; stroke: #2563eb; stroke-width: 6; }
+      .sda { fill: none; stroke: #16a34a; stroke-width: 6; }
+      .scl { fill: none; stroke: #2563eb; stroke-width: 6; }
+      .dt { fill: none; stroke: #7c3aed; stroke-width: 6; }
+      .sck { fill: none; stroke: #f97316; stroke-width: 6; }
+    </style>
+  </defs>
+
+  <rect width="1450" height="1800" fill="#ffffff"/>
+
+  <!-- 12 В -->
+  <rect x="325" y="70" width="250" height="150" rx="22" class="source"/>
+  <text x="450" y="155" text-anchor="middle" class="text">12 В</text>
+  <circle cx="390" cy="220" r="11" fill="#e11d2e"/>
+  <circle cx="510" cy="220" r="11" fill="#111111"/>
+
+  <!-- Шины по бокам -->
+  <path d="M390 220 H45 V340" class="plus"/>
+  <path d="M510 220 H855 V340" class="minus"/>
+  <path d="M45 300 H640" class="plus"/>
+  <path d="M260 340 H855" class="minus"/>
+
+  <!-- XL4015E1 -->
+  <rect x="90" y="390" width="220" height="170" rx="20" class="module"/>
+  <text x="200" y="465" text-anchor="middle" class="text">XL4015E1</text>
+  <text x="200" y="505" text-anchor="middle" class="label">5,86 В / 3 А</text>
+  <path d="M140 300 V390" class="plus"/>
+  <path d="M260 340 V390" class="minus"/>
+  <path d="M140 560 V720" class="plus"/>
+  <path d="M260 560 V720" class="minus"/>
+
+  <rect x="340" y="390" width="220" height="170" rx="20" class="module"/>
+  <text x="450" y="465" text-anchor="middle" class="text">XL4015E1</text>
+  <text x="450" y="505" text-anchor="middle" class="label">5 В / 1 А</text>
+  <path d="M390 300 V390" class="plus"/>
+  <path d="M510 340 V390" class="minus"/>
+  <path d="M390 560 V720" class="plus"/>
+
+  <rect x="590" y="390" width="220" height="170" rx="20" class="module"/>
+  <text x="700" y="465" text-anchor="middle" class="text">XL4015E1</text>
+  <text x="700" y="505" text-anchor="middle" class="label">12 В</text>
+  <path d="M640 300 V390" class="plus"/>
+  <path d="M760 340 V390" class="minus"/>
+  <path d="M640 560 V570 H1085 V630" class="plus"/>
+  <path d="M760 560 V545 H1010 V680" class="minus"/>
+
+  <!-- MOSFET-модуль с оптопарой PC817 -->
+  <rect x="940" y="590" width="290" height="330" rx="18" class="device"/>
+  <text x="1085" y="630" text-anchor="middle" class="label">MOSFET-модуль</text>
+  <text x="1085" y="660" text-anchor="middle" class="small">с оптопарой PC817</text>
+
+  <!-- Силовой трёхконтактный разъём -->
+  <rect x="975" y="680" width="220" height="105" rx="8" fill="#dbeafe" stroke="#24558f" stroke-width="4"/>
+  <circle cx="1010" cy="680" r="9" fill="#111111"/>
+  <circle cx="1085" cy="680" r="9" fill="#e11d2e"/>
+  <circle cx="1160" cy="680" r="9" fill="#111111"/>
+  <text x="1010" y="718" text-anchor="middle" class="small">− источника</text>
+  <text x="1085" y="744" text-anchor="middle" class="small">+ источника</text>
+  <text x="1085" y="766" text-anchor="middle" class="small">и + мотора</text>
+  <text x="1160" y="718" text-anchor="middle" class="small">− мотора</text>
+
+  <!-- Управляющий двухконтактный разъём -->
+  <rect x="1000" y="820" width="170" height="70" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+  <circle cx="1040" cy="890" r="9" fill="#111111"/>
+  <circle cx="1130" cy="890" r="9" fill="#eab308"/>
+  <text x="1040" y="855" text-anchor="middle" class="small">GND</text>
+  <text x="1130" y="855" text-anchor="middle" class="small">PWM</text>
+
+  <!-- Мотор N20 -->
+  <rect x="1260" y="650" width="170" height="170" rx="85" class="device"/>
+  <text x="1345" y="710" text-anchor="middle" class="label">Мотор N20</text>
+  <text x="1345" y="745" text-anchor="middle" class="small">12 В</text>
+  <text x="1345" y="775" text-anchor="middle" class="small">100 об/мин</text>
+  <!-- Плюс источника и плюс мотора скручиваются вместе -->
+  <circle cx="1085" cy="630" r="13" fill="#e11d2e"/>
+  <path d="M1085 630 V680" class="plus"/>
+  <path d="M1340 650 V630 H1085" class="plus"/>
+  <text x="1110" y="615" class="small" fill="#e11d2e">скрутить вместе</text>
+  <path d="M1160 680 V610 H1370 V650" class="minus"/>
+
+  <!-- Первая выходная ветвь: предохранитель -->
+  <path d="M140 720 V742" class="plus"/>
+  <rect x="115" y="742" width="50" height="85" fill="#ffffff" stroke="#e11d2e" stroke-width="5"/>
+  <line x1="140" y1="747" x2="140" y2="822" stroke="#e11d2e" stroke-width="5"/>
+  <text x="185" y="780" class="label">F1</text>
+  <text x="185" y="807" class="label">3 А</text>
+  <path d="M140 827 V850" class="plus"/>
+  <path d="M260 720 V850" class="minus"/>
+
+  <!-- Конденсаторы после предохранителя -->
+  <path d="M140 850 V1120" class="plus"/>
+  <path d="M260 850 V1120" class="minus"/>
+
+  <line x1="140" y1="900" x2="185" y2="900" class="plus"/>
+  <line x1="185" y1="875" x2="185" y2="925" stroke="#172033" stroke-width="5"/>
+  <line x1="203" y1="880" x2="203" y2="920" stroke="#172033" stroke-width="5"/>
+  <line x1="203" y1="900" x2="260" y2="900" class="minus"/>
+  <text x="194" y="865" text-anchor="middle" class="label">+</text>
+  <text x="285" y="907" class="small">2400 мкФ</text>
+
+  <line x1="140" y1="995" x2="185" y2="995" class="plus"/>
+  <line x1="185" y1="970" x2="185" y2="1020" stroke="#172033" stroke-width="5"/>
+  <line x1="203" y1="970" x2="203" y2="1020" stroke="#172033" stroke-width="5"/>
+  <line x1="203" y1="995" x2="260" y2="995" class="minus"/>
+  <text x="285" y="1002" class="small">100 нФ</text>
+
+  <!-- Серво -->
+  <rect x="90" y="1120" width="220" height="130" rx="18" class="device"/>
+  <text x="200" y="1175" text-anchor="middle" class="label">Сервопривод</text>
+  <text x="200" y="1215" text-anchor="middle" class="text">TowerPro MG996R</text>
+  <circle cx="310" cy="1185" r="9" fill="#eab308"/>
+
+  <!-- Вторая выходная ветвь: Arduino через предохранитель -->
+  <path d="M390 720 V742" class="plus"/>
+  <rect x="365" y="742" width="50" height="85" fill="#ffffff" stroke="#e11d2e" stroke-width="5"/>
+  <line x1="390" y1="747" x2="390" y2="822" stroke="#e11d2e" stroke-width="5"/>
+  <text x="435" y="780" class="label">F2</text>
+  <text x="435" y="807" class="label">1 А</text>
+  <path d="M390 827 V880 H590 V930" class="plus"/>
+  <path d="M510 560 V850 H680 V930" class="minus"/>
+
+  <!-- Arduino Nano в виде схемного обозначения -->
+  <rect x="470" y="930" width="330" height="430" rx="8" class="device"/>
+  <text x="635" y="975" text-anchor="middle" class="text">Arduino Nano</text>
+  <circle cx="590" cy="930" r="9" fill="#e11d2e"/>
+  <circle cx="680" cy="930" r="9" fill="#111111"/>
+  <text x="590" y="1015" text-anchor="middle" class="label" fill="#e11d2e">5V</text>
+  <text x="680" y="1015" text-anchor="middle" class="label">GND</text>
+
+  <line x1="470" y1="1185" x2="500" y2="1185" class="signal"/>
+  <text x="510" y="1192" class="label">D9</text>
+  <circle cx="470" cy="1185" r="8" fill="#eab308"/>
+
+  <line x1="800" y1="1110" x2="830" y2="1110" class="signal"/>
+  <text x="780" y="1117" text-anchor="end" class="label">D8</text>
+  <circle cx="800" cy="1110" r="8" fill="#2563eb"/>
+
+  <line x1="800" y1="1030" x2="830" y2="1030" class="sck"/>
+  <text x="780" y="1037" text-anchor="end" class="label">D2</text>
+  <circle cx="800" cy="1030" r="8" fill="#f97316"/>
+  <line x1="800" y1="1070" x2="830" y2="1070" class="dt"/>
+  <text x="780" y="1077" text-anchor="end" class="label">D3</text>
+  <circle cx="800" cy="1070" r="8" fill="#7c3aed"/>
+  <line x1="800" y1="1150" x2="830" y2="1150" class="blue"/>
+  <text x="780" y="1157" text-anchor="end" class="label">D5</text>
+  <circle cx="800" cy="1150" r="8" fill="#2563eb"/>
+  <line x1="800" y1="1190" x2="830" y2="1190" class="green"/>
+  <text x="780" y="1197" text-anchor="end" class="label">D6</text>
+  <circle cx="800" cy="1190" r="8" fill="#16a34a"/>
+  <line x1="800" y1="1230" x2="830" y2="1230" class="red"/>
+  <text x="780" y="1237" text-anchor="end" class="label">D7</text>
+  <circle cx="800" cy="1230" r="8" fill="#dc2626"/>
+  <line x1="800" y1="1270" x2="830" y2="1270" class="pwm"/>
+  <text x="780" y="1277" text-anchor="end" class="label">D11</text>
+  <circle cx="800" cy="1270" r="8" fill="#0891b2"/>
+
+  <!-- Отдельный 4-pin I2C разъём на плате расширения -->
+  <rect x="545" y="1230" width="190" height="90" rx="8" fill="#f8fafc" stroke="#16a34a" stroke-width="4"/>
+  <text x="640" y="1257" text-anchor="middle" class="small">I2C</text>
+  <circle cx="575" cy="1320" r="8" fill="#111111"/>
+  <circle cx="620" cy="1320" r="8" fill="#e11d2e"/>
+  <circle cx="665" cy="1320" r="8" fill="#16a34a"/>
+  <circle cx="710" cy="1320" r="8" fill="#2563eb"/>
+  <text x="575" y="1298" text-anchor="middle" class="small">GND</text>
+  <text x="620" y="1298" text-anchor="middle" class="small">5V</text>
+  <text x="665" y="1298" text-anchor="middle" class="small">SDA</text>
+  <text x="710" y="1298" text-anchor="middle" class="small">SCL</text>
+
+  <!-- Сигнал серво -->
+  <path d="M310 1185 H470" class="signal"/>
+
+  <!-- Управление MOSFET-модулем -->
+  <path d="M830 1270 H900 V960 H1130 V890" class="pwm"/>
+  <path d="M680 930 V950 H1040 V890" class="minus"/>
+
+  <!-- RGB-светодиод через резисторы 220 Ом -->
+  <rect x="980" y="1000" width="250" height="160" rx="18" class="device"/>
+  <text x="1105" y="1040" text-anchor="middle" class="label">RGB-светодиод</text>
+  <text x="1105" y="1070" text-anchor="middle" class="small">B D5 · G D6 · R D7</text>
+  <text x="1105" y="1100" text-anchor="middle" class="small">через 220 Ом</text>
+  <text x="1105" y="1130" text-anchor="middle" class="small">общий вывод → GND</text>
+  <path d="M830 1150 H930 V1025 H980" class="blue"/>
+  <path d="M830 1190 H945 V1065 H980" class="green"/>
+  <path d="M830 1230 H960 V1105 H980" class="red"/>
+  <path d="M680 930 V970 H950 V1145 H980" class="minus"/>
+
+  <!-- ИК-приёмник: вынесен влево под LCD -->
+  <rect x="30" y="1640" width="260" height="140" rx="18" class="device"/>
+  <text x="160" y="1685" text-anchor="middle" class="label">ИК-приёмник</text>
+  <text x="55" y="1730" class="small">VCC</text>
+  <text x="120" y="1730" class="small">GND</text>
+  <text x="215" y="1730" class="small">OUT</text>
+  <path d="M620 1320 V1580 H80 V1640" class="plus"/>
+  <path d="M575 1320 V1560 H145 V1640" class="minus"/>
+  <path d="M830 1110 H900 V1600 H235 V1640" class="signal"/>
+
+  <!-- LCD 16x2 через отдельный I2C разъём -->
+  <rect x="30" y="1430" width="400" height="160" rx="18" class="device"/>
+  <text x="230" y="1490" text-anchor="middle" class="text">LCD 16×2 I2C</text>
+  <text x="230" y="1530" text-anchor="middle" class="small">GND · 5V · SDA · SCL</text>
+  <path d="M575 1320 V1360 H140 V1430" class="minus"/>
+  <path d="M620 1320 V1380 H200 V1430" class="plus"/>
+  <path d="M665 1320 V1400 H260 V1430" class="sda"/>
+  <path d="M710 1320 V1420 H320 V1430" class="scl"/>
+
+  <!-- HX711 -->
+  <rect x="920" y="1230" width="260" height="250" rx="18" class="device"/>
+  <text x="1050" y="1275" text-anchor="middle" class="text">HX711</text>
+  <text x="945" y="1325" class="small">VCC</text>
+  <text x="945" y="1360" class="small">GND</text>
+  <text x="945" y="1395" class="small">DT / DOUT</text>
+  <text x="945" y="1430" class="small">SCK / CLK</text>
+  <text x="1145" y="1325" text-anchor="end" class="small">E+</text>
+  <text x="1145" y="1360" text-anchor="end" class="small">E−</text>
+  <text x="1145" y="1395" text-anchor="end" class="small">A+</text>
+  <text x="1145" y="1430" text-anchor="end" class="small">A−</text>
+
+  <!-- Питание и сигналы HX711 -->
+  <path d="M620 930 V900 H890 V1315 H920" class="plus"/>
+  <path d="M680 930 V875 H865 V1350 H920" class="minus"/>
+  <path d="M830 1070 H875 V1385 H920" class="dt"/>
+  <path d="M830 1030 H850 V1420 H920" class="sck"/>
+
+  <!-- Тензодатчик -->
+  <rect x="1240" y="1270" width="180" height="170" rx="18" class="device"/>
+  <text x="1330" y="1335" text-anchor="middle" class="label">Тензодатчик</text>
+  <text x="1330" y="1370" text-anchor="middle" class="small">4 провода</text>
+  <path d="M1180 1315 H1240" class="plus"/>
+  <path d="M1180 1350 H1240" class="minus"/>
+  <path d="M1180 1385 H1240" class="dt"/>
+  <path d="M1180 1420 H1240" class="sck"/>
+  <text x="1330" y="1468" text-anchor="middle" class="small">по маркировке датчика</text>
+</svg>
