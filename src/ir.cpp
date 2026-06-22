@@ -17,8 +17,8 @@
 #define VOLUME_DOWN_BUTTON 0xF807FF00UL // VOL-
 #define VOLUME_UP_BUTTON 0xEA15FF00UL // VOL+
 
-#define EEPROM_WEIGHT_MARKER_ADDRESS 3
-#define EEPROM_WEIGHT_ADDRESS 4
+#define EEPROM_WEIGHT_MARKER_ADDRESS 10
+#define EEPROM_WEIGHT_ADDRESS 11
 #define EEPROM_WEIGHT_MARKER 0x5A
 
 #define ZERO_BUTTON 0xE916FF00UL
@@ -40,7 +40,7 @@ enum AngleSetupStep {
   ANGLE_SETUP_NONE,
   ANGLE_SETUP_OPEN,
   ANGLE_SETUP_CLOSED,
-  ANGLE_SETUP_FINE
+  ANGLE_SETUP_SLOW
 };
 
 AngleSetupStep angleSetupStep = ANGLE_SETUP_NONE;
@@ -122,8 +122,8 @@ void setDigit(uint32_t buttonCode) {
 void handleEditButtons(uint32_t buttonCode) {
   if (buttonCode == PREV_BUTTON) {
     angleSetupStep = ANGLE_SETUP_OPEN;
-    servoSetActiveAngle(SERVO_OPEN_ANGLE);
-    lsdShowAngleSetup(SERVO_OPEN_ANGLE, servoGetAngle(SERVO_OPEN_ANGLE));
+    servo().setActiveAngle(ServoControl::OPEN_ANGLE);
+    lsdShowAngleSetup(ServoControl::OPEN_ANGLE, servo().getAngle(ServoControl::OPEN_ANGLE));
   }
   else if (buttonCode == CURSOR_LEFT_BUTTON) {
     cursor = (cursor + 4) % 5;
@@ -149,24 +149,24 @@ void handleEditButtons(uint32_t buttonCode) {
 // Обрабатывает пошаговую настройку открытого, закрытого углов и досыпки.
 void handleAngleSetupButtons(uint32_t buttonCode) {
   if (buttonCode == VOLUME_DOWN_BUTTON) {
-    servoChangeActiveAngle(-1);
+    servo().changeActiveAngle(-1);
   }
   else if (buttonCode == VOLUME_UP_BUTTON) {
-    servoChangeActiveAngle(1);
+    servo().changeActiveAngle(1);
   }
   else if (buttonCode == PREV_BUTTON) {
     if (angleSetupStep == ANGLE_SETUP_OPEN) {
       angleSetupStep = ANGLE_SETUP_CLOSED;
-      servoSetActiveAngle(SERVO_CLOSED_ANGLE);
+      servo().setActiveAngle(ServoControl::CLOSED_ANGLE);
     }
     else if (angleSetupStep == ANGLE_SETUP_CLOSED) {
-      angleSetupStep = ANGLE_SETUP_FINE;
-      servoResetFineAngleToClosed();
-      servoSetActiveAngle(SERVO_FINE_ANGLE);
+      angleSetupStep = ANGLE_SETUP_SLOW;
+      servo().resetSlowAngleToClosed();
+      servo().setActiveAngle(ServoControl::SLOW_ANGLE);
     }
     else {
-      servoSaveSettings();
-      servoFinishAngleSetup();
+      servo().saveSettings();
+      servo().finishAngleSetup();
       angleSetupStep = ANGLE_SETUP_NONE;
       lsdShowDigits(digits, cursor);
       return;
@@ -176,27 +176,27 @@ void handleAngleSetupButtons(uint32_t buttonCode) {
     return;
   }
 
-  ServoAngleType angleType = SERVO_FINE_ANGLE;
+  ServoControl::AngleType angleType = ServoControl::SLOW_ANGLE;
   if (angleSetupStep == ANGLE_SETUP_OPEN) {
-    angleType = SERVO_OPEN_ANGLE;
+    angleType = ServoControl::OPEN_ANGLE;
   }
   else if (angleSetupStep == ANGLE_SETUP_CLOSED) {
-    angleType = SERVO_CLOSED_ANGLE;
+    angleType = ServoControl::CLOSED_ANGLE;
   }
-  lsdShowAngleSetup(angleType, servoGetAngle(angleType));
+  lsdShowAngleSetup(angleType, servo().getAngle(angleType));
 }
 
 // Обрабатывает кнопки в рабочем режиме.
 void handleWorkButtons(uint32_t buttonCode) {
   if (buttonCode == PLAY_BUTTON) {
     workScreen = false;
-    servoStopCycle();
+    servo().stopCycle();
     lsdShowDigits(digits, cursor);
   }
   else if (buttonCode == START_BUTTON) {
     lsdShowTare();
     scaleTare();
-    servoStartCycle();
+    servo().startCycle();
   }
   else if (buttonCode == EQ_BUTTON) {
     lsdShowTare();

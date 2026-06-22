@@ -10,4 +10,4 @@ void lsdUpdateDigits(const byte digits[5]);
 void lsdUpdateCursor(byte cursor);
 void lsdShowWorkScreen(long currentWeight, long targetWeight, bool showChHint);
 void lsdUpdateCurrentWeight(long currentWeight, bool showChHint);
-void lsdShowAngleSetup(ServoAngleType angleType, int angle);
+void lsdShowAngleSetup(ServoControl::AngleType angleType, int angle);

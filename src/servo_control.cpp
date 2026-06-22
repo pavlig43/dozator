@@ -10,54 +10,123 @@
 // Здесь используем D9 через write9(...).
 #define SERVO_PIN 9
 
-#define EEPROM_MARKER_ADDRESS 0
-#define EEPROM_OPEN_ANGLE_ADDRESS 1
-#define EEPROM_CLOSED_ANGLE_ADDRESS 2
-#define EEPROM_FINE_ANGLE_ADDRESS 8
-#define EEPROM_FINE_ANGLE_MARKER_ADDRESS 9
-#define EEPROM_SETTINGS_MARKER 0xA5
-#define EEPROM_FINE_ANGLE_MARKER 0xF1
-#define DEFAULT_ANGLE 90
-#define MIN_ANGLE 10
-#define MAX_ANGLE 170
-#define SMALL_REMAINING_LIMIT_GRAMS 200
-#define MEDIUM_REMAINING_LIMIT_GRAMS 400
-#define MAIN_FEED_STOP_MARGIN_GRAMS 50
-#define SETTLE_TIME_MS 1000UL
-#define FINE_FEED_TIME_MS 1000UL
+#define EEPROM_MARKER_ADDRESS 0 // Адрес признака сохранённых настроек серво.
+#define EEPROM_SETTINGS_MARKER_VALUE 0xA5 // Значение признака сохранённых настроек серво.
+#define EEPROM_OPEN_ANGLE_ADDRESS 1 // Адрес угла полного открытия заслонки.
+#define EEPROM_CLOSED_ANGLE_ADDRESS 2 // Адрес угла закрытой заслонки.
+#define EEPROM_SLOW_ANGLE_ADDRESS 3 // Адрес угла медленной досыпки.
 
-enum DosingState {
-  DOSING_IDLE,
-  DOSING_MAIN_FEED,
-  DOSING_MAIN_SETTLE,
-  DOSING_FINE_FEED,
-  DOSING_FINE_SETTLE
-};
+#define DEFAULT_ANGLE 90 // Угол по умолчанию, если настройки ещё не сохранены.
+#define MIN_ANGLE 10 // Минимальный разрешённый угол, чтобы не упирать механику.
+#define MAX_ANGLE 170 // Максимальный разрешённый угол, чтобы не упирать механику.
 
-// Последний угол, который уже был отправлен в серву.
-int lastAngle = -1;
-DosingState dosingState = DOSING_IDLE;
-unsigned long dosingStateStartedAt = 0;
-// Сохранённые положения заслонки.
-int openAngle = DEFAULT_ANGLE;
-int closedAngle = DEFAULT_ANGLE;
-int fineAngle = DEFAULT_ANGLE;
-// Выбранный угол во время настройки.
-ServoAngleType activeAngle = SERVO_OPEN_ANGLE;
-bool angleSetupActive = false;
+#define SMALL_REMAINING_LIMIT_GRAMS 200 // Остаток до цели для открытия примерно на треть диапазона.
+#define MEDIUM_REMAINING_LIMIT_GRAMS 400 // Остаток до цели для открытия примерно на половину диапазона.
+#define MAIN_FILL_STOP_MARGIN_GRAMS 50 // Запас до цели, где основная подача останавливается.
 
-// Переводит заслонку в указанный угол, не повторяя одинаковые команды серве.
-void writeServoAngle(int angle) {
+#define WAIT_TIME_MS 1000UL // Пауза после остановки подачи для стабилизации веса.
+#define SLOW_FILL_TIME_MS 1000UL // Длительность одного этапа медленной досыпки.
+
+static ServoControl servoInstance;
+
+ServoControl& servo() {
+  return servoInstance;
+}
+
+// Общие операции серво.
+
+// Отправляет угол в серву только при реальном изменении команды.
+void ServoControl::writeAngle(const int angle) {
   if (angle != lastAngle) {
     write9(angle);
     lastAngle = angle;
   }
 }
 
-// Выбирает угол основной подачи по оставшемуся до цели весу:
-// треть диапазона, половина диапазона или полное открытие.
-int getMainFeedAngle(long remainingWeight) {
-  int angleRange = closedAngle - openAngle;
+void ServoControl::setup() {
+  loadSettings();
+  writeAngle(closedAngle);
+}
+
+bool ServoControl::isOpening() const {
+  return dosingState != DOSING_IDLE;
+}
+
+// Настройки углов в EEPROM.
+
+// Углы хранятся в EEPROM по одному байту, поэтому диапазон ограничен 10..170.
+void ServoControl::loadSettings() {
+  if (EEPROM.read(EEPROM_MARKER_ADDRESS) == EEPROM_SETTINGS_MARKER_VALUE) {
+    openAngle = constrain(EEPROM.read(EEPROM_OPEN_ANGLE_ADDRESS), MIN_ANGLE, MAX_ANGLE);
+    closedAngle = constrain(EEPROM.read(EEPROM_CLOSED_ANGLE_ADDRESS), MIN_ANGLE, MAX_ANGLE);
+    slowAngle = constrain(EEPROM.read(EEPROM_SLOW_ANGLE_ADDRESS), MIN_ANGLE, MAX_ANGLE);
+  }
+  else {
+    openAngle = DEFAULT_ANGLE;
+    closedAngle = DEFAULT_ANGLE;
+    slowAngle = closedAngle;
+  }
+}
+
+void ServoControl::saveSettings() const {
+  EEPROM.update(EEPROM_OPEN_ANGLE_ADDRESS, openAngle);
+  EEPROM.update(EEPROM_CLOSED_ANGLE_ADDRESS, closedAngle);
+  EEPROM.update(EEPROM_SLOW_ANGLE_ADDRESS, slowAngle);
+  EEPROM.update(EEPROM_MARKER_ADDRESS, EEPROM_SETTINGS_MARKER_VALUE);
+}
+
+// Ручная настройка углов заслонки.
+
+int ServoControl::getAngle(const ServoControl::AngleType angleType) const {
+  if (angleType == OPEN_ANGLE) {
+    return openAngle;
+  }
+
+  if (angleType == CLOSED_ANGLE) {
+    return closedAngle;
+  }
+
+  return slowAngle;
+}
+
+void ServoControl::setActiveAngle(const ServoControl::AngleType angleType) {
+  activeAngle = angleType;
+  angleSetupActive = true;
+  writeAngle(getAngle(activeAngle));
+}
+
+void ServoControl::resetSlowAngleToClosed() {
+  slowAngle = closedAngle;
+}
+
+void ServoControl::changeActiveAngle(int delta) {
+  int newAngle = constrain(getAngle(activeAngle) + delta, MIN_ANGLE, MAX_ANGLE);
+
+  if (activeAngle == OPEN_ANGLE) {
+    openAngle = newAngle;
+  }
+  else if (activeAngle == CLOSED_ANGLE) {
+    closedAngle = newAngle;
+  }
+  else {
+    slowAngle = newAngle;
+  }
+
+  writeAngle(newAngle);
+}
+
+void ServoControl::finishAngleSetup() {
+  angleSetupActive = false;
+  setDosingState(DOSING_IDLE);
+  writeAngle(closedAngle);
+  motorSetFeeding(false);
+}
+
+// Рабочий автомат дозирования.
+
+// Выбирает угол основной подачи: чем меньше осталось до цели, тем сильнее прикрыта заслонка.
+int ServoControl::getMainFillAngle(const long remainingWeight) const {
+  const int angleRange = closedAngle - openAngle;
 
   if (remainingWeight < SMALL_REMAINING_LIMIT_GRAMS) {
     return closedAngle - angleRange / 3;
@@ -70,170 +139,76 @@ int getMainFeedAngle(long remainingWeight) {
   return openAngle;
 }
 
-// Переводит автомат в новое состояние и запускает отсчёт времени этого этапа.
-void setDosingState(DosingState newState) {
+// При входе во временное состояние таймер сбрасывается от момента перехода.
+void ServoControl::setDosingState(const DosingState newState) {
   dosingState = newState;
-  dosingStateStartedAt = millis();
+
+  if (newState == DOSING_MAIN_WAIT || newState == DOSING_SLOW_WAIT) {
+    waitTimer.reset();
+  }
+  else if (newState == DOSING_SLOW_FILL) {
+    slowFillTimer.reset();
+  }
 }
 
-// Завершает дозирование: закрывает заслонку и выключает двигатель.
-void finishDosing() {
-  setDosingState(DOSING_IDLE);
-  writeServoAngle(closedAngle);
-  motorSetFeeding(false);
-}
-
-// Запускает основную подачу с углом, выбранным по заданному весу.
-void servoStartCycle() {
-  setDosingState(DOSING_MAIN_FEED);
-  writeServoAngle(getMainFeedAngle(irGetTargetNumber() - scaleGetWeightGrams()));
+void ServoControl::startCycle() {
+  setDosingState(DOSING_MAIN_FILL);
   motorSetFeeding(true);
 }
 
-// Немедленно останавливает подачу, закрывает заслонку и выключает двигатель.
-void servoStopCycle() {
+void ServoControl::stopCycle() {
   setDosingState(DOSING_IDLE);
-  writeServoAngle(closedAngle);
+  writeAngle(closedAngle);
   motorSetFeeding(false);
 }
 
-// Сообщает экрану, выполняется ли сейчас один из этапов дозирования.
-bool servoIsOpening() {
-  return dosingState != DOSING_IDLE;
-}
-
-// Загружает настроенные углы из EEPROM или оставляет значения по умолчанию.
-// Взаимное положение углов здесь намеренно не проверяется.
-void servoLoadSettings() {
-  if (EEPROM.read(EEPROM_MARKER_ADDRESS) == EEPROM_SETTINGS_MARKER) {
-    openAngle = constrain(EEPROM.read(EEPROM_OPEN_ANGLE_ADDRESS), MIN_ANGLE, MAX_ANGLE);
-    closedAngle = constrain(EEPROM.read(EEPROM_CLOSED_ANGLE_ADDRESS), MIN_ANGLE, MAX_ANGLE);
-  }
-  else {
-    openAngle = DEFAULT_ANGLE;
-    closedAngle = DEFAULT_ANGLE;
-  }
-
-  if (EEPROM.read(EEPROM_FINE_ANGLE_MARKER_ADDRESS) == EEPROM_FINE_ANGLE_MARKER) {
-    fineAngle = constrain(EEPROM.read(EEPROM_FINE_ANGLE_ADDRESS), MIN_ANGLE, MAX_ANGLE);
-  }
-  else {
-    fineAngle = closedAngle;
-  }
-}
-
-// Сохраняет настроенные углы в EEPROM только при изменении байтов.
-void servoSaveSettings() {
-  EEPROM.update(EEPROM_OPEN_ANGLE_ADDRESS, openAngle);
-  EEPROM.update(EEPROM_CLOSED_ANGLE_ADDRESS, closedAngle);
-  EEPROM.update(EEPROM_FINE_ANGLE_ADDRESS, fineAngle);
-  EEPROM.update(EEPROM_FINE_ANGLE_MARKER_ADDRESS, EEPROM_FINE_ANGLE_MARKER);
-  EEPROM.update(EEPROM_MARKER_ADDRESS, EEPROM_SETTINGS_MARKER);
-}
-
-// Возвращает один из сохранённых углов заслонки.
-int servoGetAngle(ServoAngleType angleType) {
-  if (angleType == SERVO_OPEN_ANGLE) {
-    return openAngle;
-  }
-
-  if (angleType == SERVO_CLOSED_ANGLE) {
-    return closedAngle;
-  }
-
-  return fineAngle;
-}
-
-// Начинает настройку выбранного положения и сразу показывает его механически.
-void servoSetActiveAngle(ServoAngleType angleType) {
-  activeAngle = angleType;
-  angleSetupActive = true;
-  writeServoAngle(servoGetAngle(activeAngle));
-}
-
-// Начинает настройку досыпки с текущего закрытого положения.
-void servoResetFineAngleToClosed() {
-  fineAngle = closedAngle;
-}
-
-// Изменяет настраиваемый угол на указанное число градусов и двигает серву.
-void servoChangeActiveAngle(int delta) {
-  int newAngle = constrain(servoGetAngle(activeAngle) + delta, MIN_ANGLE, MAX_ANGLE);
-
-  if (activeAngle == SERVO_OPEN_ANGLE) {
-    openAngle = newAngle;
-  }
-  else if (activeAngle == SERVO_CLOSED_ANGLE) {
-    closedAngle = newAngle;
-  }
-  else {
-    fineAngle = newAngle;
-  }
-
-  writeServoAngle(newAngle);
-}
-
-// Завершает настройку, закрывает заслонку и гарантированно отключает подачу.
-void servoFinishAngleSetup() {
-  angleSetupActive = false;
-  dosingState = DOSING_IDLE;
-  writeServoAngle(closedAngle);
-  motorSetFeeding(false);
-}
-
-// Загружает углы при запуске и устанавливает заслонку в закрытое положение.
-void servoSetup() {
-  servoLoadSettings();
-  writeServoAngle(closedAngle);
-}
-
-// Выполняет текущий этап дозирования без delay():
-// основную подачу, стабилизацию, точную досыпку или завершение.
-void servoLoop() {
+// Автомат дозирования: основная подача, осадка веса, досыпка и повторная осадка до цели.
+void ServoControl::loop() {
+  // Во время настройки углов loop() не должен возвращать заслонку в рабочее состояние.
   if (angleSetupActive) {
     return;
   }
 
-  long targetWeight = irGetTargetNumber();
-  long currentWeight = scaleGetWeightGrams();
-  unsigned long stateElapsed = millis() - dosingStateStartedAt;
+  const long targetWeight = irGetTargetNumber();
+  const long currentWeight = scaleGetWeightGrams();
 
+  // Цель проверяем только во время запущенного дозирования, чтобы idle не вызывал stopCycle() каждый loop().
   if (dosingState != DOSING_IDLE && currentWeight >= targetWeight) {
-    finishDosing();
+    stopCycle();
     return;
   }
 
   switch (dosingState) {
-  case DOSING_MAIN_FEED:
-    if (currentWeight >= targetWeight - MAIN_FEED_STOP_MARGIN_GRAMS) {
-      writeServoAngle(closedAngle);
+  case DOSING_MAIN_FILL:
+    if (currentWeight >= targetWeight - MAIN_FILL_STOP_MARGIN_GRAMS) {
+      writeAngle(closedAngle);
       motorSetFeeding(false);
-      setDosingState(DOSING_MAIN_SETTLE);
+      setDosingState(DOSING_MAIN_WAIT);
     }
     else {
-      writeServoAngle(getMainFeedAngle(targetWeight - currentWeight));
+      writeAngle(getMainFillAngle(targetWeight - currentWeight));
     }
     break;
 
-  case DOSING_MAIN_SETTLE:
-  case DOSING_FINE_SETTLE:
-    if (stateElapsed >= SETTLE_TIME_MS) {
-      writeServoAngle(fineAngle);
+  case DOSING_MAIN_WAIT:
+  case DOSING_SLOW_WAIT:
+    if (waitTimer.ready()) {
+      writeAngle(slowAngle);
       motorSetFeeding(true);
-      setDosingState(DOSING_FINE_FEED);
+      setDosingState(DOSING_SLOW_FILL);
     }
     break;
 
-  case DOSING_FINE_FEED:
-    if (stateElapsed >= FINE_FEED_TIME_MS) {
-      writeServoAngle(closedAngle);
+  case DOSING_SLOW_FILL:
+    if (slowFillTimer.ready()) {
+      writeAngle(closedAngle);
       motorSetFeeding(false);
-      setDosingState(DOSING_FINE_SETTLE);
+      setDosingState(DOSING_SLOW_WAIT);
     }
     break;
 
   case DOSING_IDLE:
-    writeServoAngle(closedAngle);
+    writeAngle(closedAngle);
     motorSetFeeding(false);
     break;
   }

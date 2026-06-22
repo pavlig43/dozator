@@ -74,17 +74,17 @@ void lsdUpdateCurrentWeight(long currentWeight, bool showChHint) {
 }
 
 // Показывает выбранный этап настройки и текущее значение угла.
-void lsdShowAngleSetup(ServoAngleType angleType, int angle) {
+void lsdShowAngleSetup(ServoControl::AngleType angleType, int angle) {
   lcd.clear();
   lcd.setCursor(0, 0);
-  if (angleType == SERVO_OPEN_ANGLE) {
+  if (angleType == ServoControl::OPEN_ANGLE) {
     lcd.print("OPEN ANGLE");
   }
-  else if (angleType == SERVO_CLOSED_ANGLE) {
+  else if (angleType == ServoControl::CLOSED_ANGLE) {
     lcd.print("CLOSED ANGLE");
   }
   else {
-    lcd.print("FINE ANGLE");
+    lcd.print("SLOW ANGLE");
   }
   lcd.setCursor(0, 1);
   lcd.print(angle);

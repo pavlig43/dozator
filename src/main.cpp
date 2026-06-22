@@ -59,7 +59,7 @@ void updateRgbStatus() {
   if (irIsAngleSetupActive() || !workScreen) {
     rgbOff();
   }
-  else if (servoIsOpening()) {
+  else if (servo().isOpening()) {
     rgbBlue();
   }
   else {
@@ -76,7 +76,7 @@ void setup()
   lsdShowLoading();
   scaleSetup();
   irSetup();
-  servoSetup();
+  servo().setup();
   motorSetup();
   rgbSetup();
   showEditScreen();
@@ -86,7 +86,7 @@ void setup()
 void loop() {
   irLoop();
   scaleLoop();
-  servoLoop();
+  servo().loop();
   motorLoop();
   updateRgbStatus();
 
@@ -101,7 +101,7 @@ void loop() {
 
   // При входе в рабочий экран рисуем его целиком.
   if (lastShownCursor != 255) {
-    lsdShowWorkScreen(scaleGetWeightGrams(), irGetTargetNumber(), !servoIsOpening());
+    lsdShowWorkScreen(scaleGetWeightGrams(), irGetTargetNumber(), !servo().isOpening());
     lastWeightScreenUpdate = millis();
     lastShownCursor = 255;
   }
@@ -109,6 +109,6 @@ void loop() {
   // В рабочем экране периодически обновляем только текущий вес.
   if (millis() - lastWeightScreenUpdate >= WEIGHT_SCREEN_UPDATE_MS) {
     lastWeightScreenUpdate = millis();
-    lsdUpdateCurrentWeight(scaleGetWeightGrams(), !servoIsOpening());
+    lsdUpdateCurrentWeight(scaleGetWeightGrams(), !servo().isOpening());
   }
 }

@@ -5,6 +5,11 @@ class Tmr {
     unsigned long lastTime;
 
 public:
-    explicit Tmr(unsigned long period);
+    explicit constexpr Tmr(unsigned long period)
+        : _period(period),
+          lastTime(0) {
+    }
+
+    void reset();
     bool ready();
 };
