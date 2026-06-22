@@ -8,15 +8,15 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // Инициализирует LCD и включает подсветку.
-void lsdSetup() {
+void Display::init() {
   lcd.init();
   lcd.backlight();
   lcd.clear();
-
+  showLoading();
 }
 
 // Показывает экран загрузки при старте.
-void lsdShowLoading() {
+void Display::showLoading() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Loading...");
@@ -24,7 +24,7 @@ void lsdShowLoading() {
 }
 
 // Показывает экран тарирования весов.
-void lsdShowTare() {
+void Display::showTare() {
   lcd.setCursor(0, 0);
   lcd.print("                ");
   lcd.setCursor(0, 0);
@@ -32,13 +32,13 @@ void lsdShowTare() {
 }
 
 // Показывает экран ввода целевого веса.
-void lsdShowDigits(const byte digits[5], byte cursor) {
-  lsdUpdateDigits(digits);
-  lsdUpdateCursor(cursor);
+void Display::showWeightInput(const byte digits[5], byte cursor) {
+  updateDigits(digits);
+  updateCursor(cursor);
 }
 
 // Обновляет только верхнюю строку с цифрами целевого веса.
-void lsdUpdateDigits(const byte digits[5]) {
+void Display::updateDigits(const byte digits[5]) {
   lcd.setCursor(0, 0);
   for (int i = 0; i < 5; i++) {
     lcd.print(digits[i]);
@@ -47,7 +47,7 @@ void lsdUpdateDigits(const byte digits[5]) {
 }
 
 // Обновляет только нижнюю строку с указателем курсора.
-void lsdUpdateCursor(byte cursor) {
+void Display::updateCursor(byte cursor) {
   lcd.setCursor(0, 1);
   lcd.print("                ");
   lcd.setCursor(cursor, 1);
@@ -55,15 +55,15 @@ void lsdUpdateCursor(byte cursor) {
 }
 
 // Полностью рисует рабочий экран: текущий вес с подсказкой CH и целевой вес.
-void lsdShowWorkScreen(long currentWeight, long targetWeight, bool showChHint) {
+void Display::showWork(long currentWeight, unsigned long targetWeight, bool showChHint) {
   lcd.clear();
-  lsdUpdateCurrentWeight(currentWeight, showChHint);
+  updateCurrentWeight(currentWeight, showChHint);
   lcd.setCursor(0, 1);
   lcd.print(targetWeight);
 }
 
 // Обновляет только верхнюю строку с текущим весом и подсказкой CH.
-void lsdUpdateCurrentWeight(long currentWeight, bool showChHint) {
+void Display::updateCurrentWeight(long currentWeight, bool showChHint) {
   lcd.setCursor(0, 0);
   lcd.print("                ");
   lcd.setCursor(0, 0);
@@ -74,17 +74,17 @@ void lsdUpdateCurrentWeight(long currentWeight, bool showChHint) {
 }
 
 // Показывает выбранный этап настройки и текущее значение угла.
-void lsdShowAngleSetup(ServoAngleType angleType, int angle) {
+void Display::showAngleSettings(AngleKind angleKind, int angle) {
   lcd.clear();
   lcd.setCursor(0, 0);
-  if (angleType == SERVO_OPEN_ANGLE) {
+  if (angleKind == AngleKind::OPEN) {
     lcd.print("OPEN ANGLE");
   }
-  else if (angleType == SERVO_CLOSED_ANGLE) {
+  else if (angleKind == AngleKind::CLOSED) {
     lcd.print("CLOSED ANGLE");
   }
   else {
-    lcd.print("FINE ANGLE");
+    lcd.print("SLOW ANGLE");
   }
   lcd.setCursor(0, 1);
   lcd.print(angle);

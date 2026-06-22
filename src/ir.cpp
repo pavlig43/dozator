@@ -1,11 +1,6 @@
 #include <Arduino.h>
-#include <EEPROM.h>
 #include <IRremote.hpp>
-#include <string.h>
 #include "ir.h"
-#include "lsd.h"
-#include "scale_sensor.h"
-#include "servo_control.h"
 
 #define IR_RECEIVE_PIN 8
 #define CURSOR_LEFT_BUTTON 0xBA45FF00UL // CH-
@@ -16,10 +11,6 @@
 #define PREV_BUTTON 0xBB44FF00UL // PREV
 #define VOLUME_DOWN_BUTTON 0xF807FF00UL // VOL-
 #define VOLUME_UP_BUTTON 0xEA15FF00UL // VOL+
-
-#define EEPROM_WEIGHT_MARKER_ADDRESS 3
-#define EEPROM_WEIGHT_ADDRESS 4
-#define EEPROM_WEIGHT_MARKER 0x5A
 
 #define ZERO_BUTTON 0xE916FF00UL
 #define ONE_BUTTON 0xF30CFF00UL
@@ -32,202 +23,52 @@
 #define EIGHT_BUTTON 0xAD52FF00UL
 #define NINE_BUTTON 0xB54AFF00UL
 
-byte digits[5] = {0, 0, 0, 5, 0};
-byte cursor = 0;
-bool workScreen = false;
-
-enum AngleSetupStep {
-  ANGLE_SETUP_NONE,
-  ANGLE_SETUP_OPEN,
-  ANGLE_SETUP_CLOSED,
-  ANGLE_SETUP_FINE
-};
-
-AngleSetupStep angleSetupStep = ANGLE_SETUP_NONE;
-
-bool irIsAngleSetupActive() {
-  return angleSetupStep != ANGLE_SETUP_NONE;
-}
-
-// Разбирает целевой вес обратно на пять цифр экрана.
-void setTargetNumber(unsigned long targetNumber) {
-  for (int i = 4; i >= 0; i--) {
-    digits[i] = targetNumber % 10;
-    targetNumber /= 10;
-  }
-}
-
-// Загружает ранее подтверждённый вес, если запись в EEPROM корректна.
-void loadTargetNumber() {
-  if (EEPROM.read(EEPROM_WEIGHT_MARKER_ADDRESS) != EEPROM_WEIGHT_MARKER) {
-    return;
-  }
-
-  unsigned long targetNumber = 0;
-  EEPROM.get(EEPROM_WEIGHT_ADDRESS, targetNumber);
-  setTargetNumber(targetNumber);
-}
-
-// Сохраняет подтверждённый вес без перезаписи неизменившихся байтов EEPROM.
-void saveTargetNumber() {
-  unsigned long targetNumber = irGetTargetNumber();
-  EEPROM.put(EEPROM_WEIGHT_ADDRESS, targetNumber);
-  EEPROM.update(EEPROM_WEIGHT_MARKER_ADDRESS, EEPROM_WEIGHT_MARKER);
-}
-
-// Собирает введённые цифры в одно целое число.
-long irGetTargetNumber() {
-  long targetNumber = 0;
-  for (int i = 0; i < 5; i++) {
-    targetNumber = targetNumber * 10 + digits[i];
-  }
-  return targetNumber;
-}
-
-// Записывает цифру с пульта в текущую позицию курсора.
-void setDigit(uint32_t buttonCode) {
-  if (buttonCode == ZERO_BUTTON) {
-    digits[cursor] = 0;
-  }
-  else if (buttonCode == ONE_BUTTON) {
-    digits[cursor] = 1;
-  }
-  else if (buttonCode == TWO_BUTTON) {
-    digits[cursor] = 2;
-  }
-  else if (buttonCode == THREE_BUTTON) {
-    digits[cursor] = 3;
-  }
-  else if (buttonCode == FOUR_BUTTON) {
-    digits[cursor] = 4;
-  }
-  else if (buttonCode == FIVE_BUTTON) {
-    digits[cursor] = 5;
-  }
-  else if (buttonCode == SIX_BUTTON) {
-    digits[cursor] = 6;
-  }
-  else if (buttonCode == SEVEN_BUTTON) {
-    digits[cursor] = 7;
-  }
-  else if (buttonCode == EIGHT_BUTTON) {
-    digits[cursor] = 8;
-  }
-  else if (buttonCode == NINE_BUTTON) {
-    digits[cursor] = 9;
-  }
-}
-
-// Обрабатывает кнопки в режиме редактирования веса.
-void handleEditButtons(uint32_t buttonCode) {
-  if (buttonCode == PREV_BUTTON) {
-    angleSetupStep = ANGLE_SETUP_OPEN;
-    servoSetActiveAngle(SERVO_OPEN_ANGLE);
-    lsdShowAngleSetup(SERVO_OPEN_ANGLE, servoGetAngle(SERVO_OPEN_ANGLE));
-  }
-  else if (buttonCode == CURSOR_LEFT_BUTTON) {
-    cursor = (cursor + 4) % 5;
-  }
-  else if (buttonCode == CURSOR_RIGHT_BUTTON) {
-    cursor = (cursor + 1) % 5;
-  }
-  else if (buttonCode == EQ_BUTTON) {
-    memset(digits, 0, sizeof(digits));
-    cursor = 0;
-  }
-  else if (buttonCode == PLAY_BUTTON) {
-    if (irGetTargetNumber() > 0) {
-      saveTargetNumber();
-      workScreen = true;
-    }
-  }
-  else {
-    setDigit(buttonCode);
-  }
-}
-
-// Обрабатывает пошаговую настройку открытого, закрытого углов и досыпки.
-void handleAngleSetupButtons(uint32_t buttonCode) {
-  if (buttonCode == VOLUME_DOWN_BUTTON) {
-    servoChangeActiveAngle(-1);
-  }
-  else if (buttonCode == VOLUME_UP_BUTTON) {
-    servoChangeActiveAngle(1);
-  }
-  else if (buttonCode == PREV_BUTTON) {
-    if (angleSetupStep == ANGLE_SETUP_OPEN) {
-      angleSetupStep = ANGLE_SETUP_CLOSED;
-      servoSetActiveAngle(SERVO_CLOSED_ANGLE);
-    }
-    else if (angleSetupStep == ANGLE_SETUP_CLOSED) {
-      angleSetupStep = ANGLE_SETUP_FINE;
-      servoResetFineAngleToClosed();
-      servoSetActiveAngle(SERVO_FINE_ANGLE);
-    }
-    else {
-      servoSaveSettings();
-      servoFinishAngleSetup();
-      angleSetupStep = ANGLE_SETUP_NONE;
-      lsdShowDigits(digits, cursor);
-      return;
-    }
-  }
-  else {
-    return;
-  }
-
-  ServoAngleType angleType = SERVO_FINE_ANGLE;
-  if (angleSetupStep == ANGLE_SETUP_OPEN) {
-    angleType = SERVO_OPEN_ANGLE;
-  }
-  else if (angleSetupStep == ANGLE_SETUP_CLOSED) {
-    angleType = SERVO_CLOSED_ANGLE;
-  }
-  lsdShowAngleSetup(angleType, servoGetAngle(angleType));
-}
-
-// Обрабатывает кнопки в рабочем режиме.
-void handleWorkButtons(uint32_t buttonCode) {
-  if (buttonCode == PLAY_BUTTON) {
-    workScreen = false;
-    servoStopCycle();
-    lsdShowDigits(digits, cursor);
-  }
-  else if (buttonCode == START_BUTTON) {
-    lsdShowTare();
-    scaleTare();
-    servoStartCycle();
-  }
-  else if (buttonCode == EQ_BUTTON) {
-    lsdShowTare();
-    scaleTare();
-  }
-}
-
-// Выбирает обработчик кнопки по текущему режиму экрана.
-void handleIrButton(uint32_t buttonCode) {
-  if (irIsAngleSetupActive()) {
-    handleAngleSetupButtons(buttonCode);
-  }
-  else if (workScreen) {
-    handleWorkButtons(buttonCode);
-  }
-  else {
-    handleEditButtons(buttonCode);
-  }
-}
-
-// Запускает приёмник ИК-пульта и последовательный порт.
-void irSetup() {
-  loadTargetNumber();
+// Запускает приёмник ИК-пульта. Вся логика экранов и режимов находится в App.
+void IrRemote::init() {
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
 }
 
-// Читает коды с пульта и передаёт их в обработчик.
-void irLoop() {
-  if (IrReceiver.decode()) {
-    uint32_t rawCode = IrReceiver.decodedIRData.decodedRawData;
-    handleIrButton(rawCode);
-    IrReceiver.resume();
+// Читает одну кнопку. Если сигнала нет или код неизвестен, возвращает NONE.
+Button IrRemote::read() {
+  if (!IrReceiver.decode()) {
+    return Button::NONE;
   }
+
+  const uint32_t rawCode = IrReceiver.decodedIRData.decodedRawData;
+  IrReceiver.resume();
+  return decode(rawCode);
+}
+
+Button IrRemote::decode(uint32_t rawCode) const {
+  // Здесь единственное место, где сырые HEX-коды пульта превращаются в смысловые кнопки.
+  switch (rawCode) {
+  case PREV_BUTTON: return Button::NEXT;
+  case START_BUTTON: return Button::START;
+  case CURSOR_LEFT_BUTTON: return Button::LEFT;
+  case CURSOR_RIGHT_BUTTON: return Button::RIGHT;
+  case VOLUME_UP_BUTTON: return Button::UP;
+  case VOLUME_DOWN_BUTTON: return Button::DOWN;
+  case EQ_BUTTON: return Button::CLEAR;
+  case PLAY_BUTTON: return Button::CONFIRM;
+  case ZERO_BUTTON: return Button::DIGIT_0;
+  case ONE_BUTTON: return Button::DIGIT_1;
+  case TWO_BUTTON: return Button::DIGIT_2;
+  case THREE_BUTTON: return Button::DIGIT_3;
+  case FOUR_BUTTON: return Button::DIGIT_4;
+  case FIVE_BUTTON: return Button::DIGIT_5;
+  case SIX_BUTTON: return Button::DIGIT_6;
+  case SEVEN_BUTTON: return Button::DIGIT_7;
+  case EIGHT_BUTTON: return Button::DIGIT_8;
+  case NINE_BUTTON: return Button::DIGIT_9;
+  default: return Button::NONE;
+  }
+}
+
+int IrRemote::digit(Button button) {
+  // Значения DIGIT_0..DIGIT_9 идут подряд в enum, поэтому цифру можно посчитать.
+  if (button >= Button::DIGIT_0 && button <= Button::DIGIT_9) {
+    return static_cast<int>(button) - static_cast<int>(Button::DIGIT_0);
+  }
+
+  return -1;
 }

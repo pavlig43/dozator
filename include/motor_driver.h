@@ -1,5 +1,9 @@
 #pragma once
 
-void motorSetup();
-void motorLoop();
-void motorSetFeeding(bool feeding);
+// Motor управляет MOSFET-модулем подачи как простым ключом: включён/выключен.
+class Motor {
+public:
+  void init(); // Настраивает пин и оставляет мотор выключенным.
+  void loop(); // Зарезервировано для общего стиля модулей, сейчас ничего не делает.
+  void setFilling(bool filling); // Включает или выключает фактическую подачу.
+};
