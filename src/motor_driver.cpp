@@ -10,24 +10,24 @@ void disableMotor() {
 }
 
 // Настраивает MOSFET-модуль двигателя и оставляет мотор выключенным при запуске.
-void motorSetup() {
+void Motor::init() {
   pinMode(MOTOR_PWM_PIN, OUTPUT);
   disableMotor();
 }
 
 // Мотор управляется как простой ключ: включён или выключен.
-void motorLoop() {
+void Motor::loop() {
 }
 
 // Запоминает, должна ли сейчас работать фактическая подача продукта.
-void motorSetFeeding(bool feeding) {
-  if (motorFeeding == feeding) {
+void Motor::setFilling(bool filling) {
+  if (motorFeeding == filling) {
     return;
   }
 
-  motorFeeding = feeding;
+  motorFeeding = filling;
 
-  if (feeding) {
+  if (filling) {
     digitalWrite(MOTOR_PWM_PIN, HIGH);
   }
   else {

@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <HX711.h>
-#include <math.h>
 #include "scale_sensor.h"
 
 #define SCALE_DT_PIN 3
@@ -58,14 +57,16 @@ void addWeightSample(long weightGrams) {
 
 // Подключает HX711 и задаёт калибровочный коэффициент.
 // Первое готовое показание будет принято за ноль без блокировки программы.
-void scaleSetup() {
+void Scale::init() {
   scale.begin(SCALE_DT_PIN, SCALE_SCK_PIN);
   scale.set_scale(SCALE_FACTOR);
 }
 
 // Если HX711 подготовил данные, читает одно показание и обновляет средний вес.
-// Если данных ещё нет, сразу возвращает управление в основной цикл.
-void scaleLoop() {
+// Здесь Tmr не нужен: HX711 сам сообщает готовность через is_ready().
+// Если читать по таймеру, можно либо пропустить готовое измерение, либо ждать лишнее время.
+// Поэтому loop() просто часто спрашивает датчик и сразу возвращается, если данных нет.
+void Scale::loop() {
   if (!scale.is_ready()) {
     return;
   }
@@ -81,14 +82,15 @@ void scaleLoop() {
     return;
   }
 
-  float weight = (lastRawValue - scale.get_offset()) / scale.get_scale();
+  const float rawDelta = static_cast<float>(lastRawValue - scale.get_offset());
+  const float weight = rawDelta / scale.get_scale();
   long roundedWeight = (long)(weight + (weight >= 0.0f ? 0.5f : -0.5f));
   addWeightSample(roundedWeight);
 }
 
 // Принимает последнее полученное показание за ноль и очищает усреднение.
 // Если HX711 ещё ни разу не ответил, тарирование выполнится при первом чтении.
-void scaleTare() {
+void Scale::tare() {
   if (hasRawValue) {
     scale.set_offset(lastRawValue);
     lastWeightGrams = 0;
@@ -102,6 +104,6 @@ void scaleTare() {
 
 // Возвращает сохранённый средний вес без нового обращения к HX711.
 // Это значение одновременно используют автомат дозирования и экран.
-long scaleGetWeightGrams() {
+long Scale::weightGrams() const {
   return lastWeightGrams;
 }

@@ -174,6 +174,30 @@
         "output": ".pio\\build\\nanoatmega328\\libf09\\LiquidCrystal_I2C\\LiquidCrystal_I2C.cpp.o"
     },
     {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\angle_settings.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\angle_settings.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\angle_settings.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\angle_settings.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\angle_settings_screen.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\angle_settings_screen.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\angle_settings_screen.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\angle_settings_screen.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\app.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\app.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\app.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\app.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\dosing_controller.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\dosing_controller.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\dosing_controller.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\dosing_controller.cpp.o"
+    },
+    {
         "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\ir.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\ir.cpp",
         "directory": "C:\\Users\\user\\CLionProjects\\dozator",
         "file": "src\\ir.cpp",
@@ -198,6 +222,12 @@
         "output": ".pio\\build\\nanoatmega328\\src\\motor_driver.cpp.o"
     },
     {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\navigation.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\navigation.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\navigation.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\navigation.cpp.o"
+    },
+    {
         "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\rgb_led.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\rgb_led.cpp",
         "directory": "C:\\Users\\user\\CLionProjects\\dozator",
         "file": "src\\rgb_led.cpp",
@@ -210,9 +240,45 @@
         "output": ".pio\\build\\nanoatmega328\\src\\scale_sensor.cpp.o"
     },
     {
-        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\servo_control.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\servo_control.cpp",
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\servo_memory.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\servo_memory.cpp",
         "directory": "C:\\Users\\user\\CLionProjects\\dozator",
-        "file": "src\\servo_control.cpp",
-        "output": ".pio\\build\\nanoatmega328\\src\\servo_control.cpp.o"
+        "file": "src\\servo_memory.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\servo_memory.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\servo_motor.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\servo_motor.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\servo_motor.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\servo_motor.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\target_memory.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\target_memory.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\target_memory.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\target_memory.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\tmr.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\tmr.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\tmr.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\tmr.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\weight_input.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\weight_input.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\weight_input.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\weight_input.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\weight_input_screen.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\weight_input_screen.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\weight_input_screen.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\weight_input_screen.cpp.o"
+    },
+    {
+        "command": "C:\\Users\\user\\.platformio\\packages\\toolchain-atmelavr\\bin\\avr-g++.exe -o .pio\\build\\nanoatmega328\\src\\work_screen.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60119 -DARDUINO_AVR_NANO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\EEPROM\\src -I.pio\\libdeps\\nanoatmega328\\LeightweightServo\\src -I.pio\\libdeps\\nanoatmega328\\LiquidCrystal_I2C -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\libraries\\Wire\\src -I.pio\\libdeps\\nanoatmega328\\IRremote\\src -I.pio\\libdeps\\nanoatmega328\\HX711\\src -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\cores\\arduino -IC:\\Users\\user\\.platformio\\packages\\framework-arduino-avr\\variants\\eightanaloginputs src\\work_screen.cpp",
+        "directory": "C:\\Users\\user\\CLionProjects\\dozator",
+        "file": "src\\work_screen.cpp",
+        "output": ".pio\\build\\nanoatmega328\\src\\work_screen.cpp.o"
     }
 ]

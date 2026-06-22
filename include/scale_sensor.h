@@ -1,6 +1,11 @@
 #pragma once
 
-void scaleSetup();
-void scaleLoop();
-void scaleTare();
-long scaleGetWeightGrams();
+// Scale - обёртка над HX711.
+// loop() неблокирующий: если данных нет, он сразу возвращает управление.
+class Scale {
+public:
+  void init(); // Настраивает HX711 и калибровочный коэффициент.
+  void loop(); // Читает готовое измерение и обновляет средний вес.
+  void tare(); // Принимает текущий вес за ноль.
+  long weightGrams() const; // Последний усреднённый вес в граммах.
+};
