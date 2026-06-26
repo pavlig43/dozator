@@ -44,6 +44,18 @@ void WorkScreen::exit() {
 void WorkScreen::loop() {
   // Порядок важен: сначала получить свежий вес, потом принять решение автомата.
   scale.loop();
+
+  if (tareAction != TareAction::NONE) {
+    servo.loop();
+    updateRgb();
+
+    if (scale.tareDone()) {
+      finishTare();
+    }
+
+    return;
+  }
+
   dosing.loop();
   servo.loop();
   updateRgb();
@@ -55,21 +67,31 @@ void WorkScreen::loop() {
 }
 
 void WorkScreen::handleButton(Button button) {
-  if (button == Button::CONFIRM) {
-    // CONFIRM в рабочем режиме означает выход обратно к редактированию цели.
-    navigation.openWeightInput();
-  }
-  else if (button == Button::START) {
-    // Перед запуском дозирования тарируем весы, чтобы текущая тара стала нулём.
-    display.showTare();
-    scale.tare();
-    dosing.start();
+  if (button == Button::START) {
+    beginTare(TareAction::START_AFTER_TARE);
   }
   else if (button == Button::CLEAR) {
-    // CLEAR тарирует без старта дозирования.
-    display.showTare();
-    scale.tare();
+    beginTare(TareAction::TARE_ONLY);
   }
+}
+
+void WorkScreen::beginTare(TareAction action) {
+  dosing.stop();
+  display.showTare();
+  scale.requestTare();
+  tareAction = action;
+}
+
+void WorkScreen::finishTare() {
+  const TareAction completedAction = tareAction;
+  tareAction = TareAction::NONE;
+
+  if (completedAction == TareAction::START_AFTER_TARE) {
+    dosing.start();
+  }
+
+  display.showWork(scale.weightGrams(), targetMemory.weight(), !dosing.isDosing());
+  weightScreenTimer.reset();
 }
 
 void WorkScreen::updateRgb() {

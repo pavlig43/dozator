@@ -10,12 +10,12 @@ void WeightInput::setTargetWeight(unsigned long weight) {
 }
 
 void WeightInput::handleButton(Button button) {
-  if (button == Button::LEFT) {
+  if (button == Button::PREV) {
     cursor = (cursor + 4) % 5;
     return;
   }
 
-  if (button == Button::RIGHT) {
+  if (button == Button::NEXT) {
     cursor = (cursor + 1) % 5;
     return;
   }

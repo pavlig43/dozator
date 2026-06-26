@@ -7,14 +7,19 @@ AngleSettingsScreen::AngleSettingsScreen(Display& display, AngleSettings& angleS
 }
 
 void AngleSettingsScreen::enter() {
-  // Настройка углов нужна не всегда, поэтому EEPROM серво и само серво поднимаем лениво.
+  // Настройка заслонки нужна не всегда, поэтому EEPROM серво и само серво поднимаем лениво.
   if (!initialized) {
     angleSettings.init();
     initialized = true;
   }
 
   angleSettings.begin();
-  display.showAngleSettings(angleSettings.currentKind(), angleSettings.currentAngle());
+  display.showAngleSettings(angleSettings.currentKind(), angleSettings.currentValue());
+}
+
+void AngleSettingsScreen::exit() {
+  angleSettings.end();
+  angleSettings.loop();
 }
 
 void AngleSettingsScreen::loop() {
@@ -22,20 +27,12 @@ void AngleSettingsScreen::loop() {
 }
 
 void AngleSettingsScreen::handleButton(Button button) {
-  // AngleSettings возвращает true, если после кнопки нужно обновить LCD
-  // или выйти обратно на экран ввода веса.
+  // AngleSettings возвращает true, если после кнопки нужно обновить LCD.
   const bool changed = angleSettings.handleButton(button);
 
   if (!changed) {
     return;
   }
 
-  if (angleSettings.isActive()) {
-    display.showAngleSettings(angleSettings.currentKind(), angleSettings.currentAngle());
-  }
-  else {
-    // Сценарий завершён: угол закрытия уже выставлен, возвращаемся к вводу веса.
-    angleSettings.loop();
-    navigation.openWeightInput();
-  }
+  display.showAngleSettings(angleSettings.currentKind(), angleSettings.currentValue());
 }

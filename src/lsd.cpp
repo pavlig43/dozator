@@ -23,6 +23,24 @@ void Display::showLoading() {
 
 }
 
+// Показывает меню выбора экрана. PREV/NEXT листают, PLAY открывает выбранный экран.
+void Display::showMenu(ScreenId selectedScreen) {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Select screen");
+  lcd.setCursor(0, 1);
+
+  if (selectedScreen == ScreenId::WEIGHT_INPUT) {
+    lcd.print("> Weight input");
+  }
+  else if (selectedScreen == ScreenId::ANGLE_SETTINGS) {
+    lcd.print("> Angle setup");
+  }
+  else {
+    lcd.print("> Work");
+  }
+}
+
 // Показывает экран тарирования весов.
 void Display::showTare() {
   lcd.setCursor(0, 0);
@@ -73,19 +91,22 @@ void Display::updateCurrentWeight(long currentWeight, bool showChHint) {
   lcd.print(currentWeight);
 }
 
-// Показывает выбранный этап настройки и текущее значение угла.
-void Display::showAngleSettings(AngleKind angleKind, int angle) {
+// Показывает выбранный этап настройки и текущее значение.
+void Display::showAngleSettings(AngleSettingKind kind, int value) {
   lcd.clear();
   lcd.setCursor(0, 0);
-  if (angleKind == AngleKind::OPEN) {
+  if (kind == AngleSettingKind::OPEN_ANGLE) {
     lcd.print("OPEN ANGLE");
   }
-  else if (angleKind == AngleKind::CLOSED) {
+  else if (kind == AngleSettingKind::CLOSED_ANGLE) {
     lcd.print("CLOSED ANGLE");
   }
-  else {
+  else if (kind == AngleSettingKind::SLOW_ANGLE) {
     lcd.print("SLOW ANGLE");
   }
+  else {
+    lcd.print("STOP WEIGHT");
+  }
   lcd.setCursor(0, 1);
-  lcd.print(angle);
+  lcd.print(value);
 }

@@ -20,9 +20,15 @@ public:
   void enter(); // Рисует рабочий экран и включает рабочую индикацию.
   void exit(); // Останавливает дозирование и гасит RGB перед уходом.
   void loop(); // Читает вес, двигает автомат дозирования, обновляет LCD/RGB.
-  void handleButton(Button button); // START запускает цикл, CLEAR тарирует, CONFIRM назад.
+  void handleButton(Button button); // START запускает цикл, CLEAR тарирует.
 
 private:
+  enum class TareAction : byte {
+    NONE,
+    TARE_ONLY,
+    START_AFTER_TARE
+  };
+
   Display& display;
   Scale& scale;
   Rgb& rgb;
@@ -31,8 +37,11 @@ private:
   Navigation& navigation;
   Servo& servo;
   bool initialized = false; // Весы, RGB, мотор и серво поднимаются при первом входе.
+  TareAction tareAction = TareAction::NONE; // Что сделать после свежего нуля весов.
   Tmr weightScreenTimer; // Периодическое обновление веса на LCD без delay().
 
   void init(); // Ленивая инициализация железа, которое нужно только рабочему экрану.
+  void beginTare(TareAction action); // Запрашивает свежую тару и ждёт её в loop().
+  void finishTare(); // Возвращает экран к работе после завершения тарирования.
   void updateRgb(); // Зелёный - готово, синий - идёт дозирование.
 };

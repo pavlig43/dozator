@@ -8,13 +8,14 @@
 #include "weight_input.h"
 
 // Экран ввода целевого веса.
-// Владеет состоянием курсора и цифр через WeightInput, а при подтверждении
-// сохраняет вес в TargetMemory и просит Navigation открыть рабочий экран.
+// Владеет состоянием курсора и цифр через WeightInput, а при выходе
+// сохраняет ненулевой вес в TargetMemory.
 class WeightInputScreen {
 public:
   WeightInputScreen(Display& display, TargetMemory& targetMemory, Navigation& navigation);
   void init(); // Ленивая загрузка сохранённого веса из EEPROM.
   void enter(); // Полностью рисует экран ввода при входе.
+  void exit(); // Сохраняет ненулевой целевой вес при уходе с экрана.
   void loop(); // Обновляет только изменившиеся цифры и курсор.
   void handleButton(Button button); // Обрабатывает цифры, курсор, очистку и переходы.
 

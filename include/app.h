@@ -45,12 +45,21 @@ private:
   WeightInputScreen weightInputScreen;
   AngleSettingsScreen angleSettingsScreen;
   WorkScreen workScreen;
+  bool menuActive = true; // При старте открыто меню с выбранным рабочим экраном.
+  ScreenId selectedScreen = ScreenId::WORK; // Текущий пункт меню.
 
   void handleButton(Button button); // Передаёт кнопку активному экрану.
   void loopCurrentScreen(); // Вызывает loop() только у текущего экрана.
   void enterCurrentScreen(); // Вызывает enter() у текущего экрана.
   void exitCurrentScreen(); // Даёт текущему экрану остановиться перед уходом.
   void applyNavigation(); // Применяет запрошенный переход между экранами.
+  void showMenu(); // Рисует меню выбора экрана.
+  void handleMenuButton(Button button); // PREV/NEXT листают меню, CONFIRM открывает экран.
+  void openSelectedScreen(); // Закрывает меню и открывает выбранный экран.
+  void openScreen(ScreenId screen); // Открывает экран с правильным enter/exit.
+  void openMenu(ScreenId screen); // Открывает меню с выбранным пунктом.
+  void selectMenuByButton(Button button); // Циклически выбирает экран по PREV/NEXT.
+  static ScreenId menuScreenByButton(ScreenId screen, Button button);
 };
 
 App& app();

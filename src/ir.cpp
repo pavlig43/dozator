@@ -3,12 +3,11 @@
 #include "ir.h"
 
 #define IR_RECEIVE_PIN 8
-#define CURSOR_LEFT_BUTTON 0xBA45FF00UL // CH-
 #define START_BUTTON 0xB946FF00UL // CH
-#define CURSOR_RIGHT_BUTTON 0xB847FF00UL // CH+
 #define EQ_BUTTON 0xF609FF00UL // EQ
 #define PLAY_BUTTON 0xBC43FF00UL // PLAY/PAUSE
 #define PREV_BUTTON 0xBB44FF00UL // PREV
+#define NEXT_BUTTON 0xBF40FF00UL // NEXT
 #define VOLUME_DOWN_BUTTON 0xF807FF00UL // VOL-
 #define VOLUME_UP_BUTTON 0xEA15FF00UL // VOL+
 
@@ -42,10 +41,9 @@ Button IrRemote::read() {
 Button IrRemote::decode(uint32_t rawCode) const {
   // Здесь единственное место, где сырые HEX-коды пульта превращаются в смысловые кнопки.
   switch (rawCode) {
-  case PREV_BUTTON: return Button::NEXT;
+  case PREV_BUTTON: return Button::PREV;
+  case NEXT_BUTTON: return Button::NEXT;
   case START_BUTTON: return Button::START;
-  case CURSOR_LEFT_BUTTON: return Button::LEFT;
-  case CURSOR_RIGHT_BUTTON: return Button::RIGHT;
   case VOLUME_UP_BUTTON: return Button::UP;
   case VOLUME_DOWN_BUTTON: return Button::DOWN;
   case EQ_BUTTON: return Button::CLEAR;

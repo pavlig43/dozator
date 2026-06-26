@@ -26,6 +26,13 @@ void WeightInputScreen::enter() {
   displayedCursor = input.getCursor();
 }
 
+void WeightInputScreen::exit() {
+  const unsigned long targetWeight = input.targetWeight();
+  if (targetWeight > 0) {
+    targetMemory.save(targetWeight);
+  }
+}
+
 void WeightInputScreen::loop() {
   if (digitsNeedRedraw()) {
     display.updateDigits(input.getDigits());
@@ -39,22 +46,6 @@ void WeightInputScreen::loop() {
 }
 
 void WeightInputScreen::handleButton(Button button) {
-  if (button == Button::NEXT) {
-    // NEXT не меняет вес, а открывает отдельный сценарий настройки углов.
-    navigation.openAngleSettings();
-    return;
-  }
-
-  if (button == Button::CONFIRM) {
-    // Нулевой вес не сохраняем: рабочий режим без цели не имеет смысла.
-    const unsigned long targetWeight = input.targetWeight();
-    if (targetWeight > 0) {
-      targetMemory.save(targetWeight);
-      navigation.openWork();
-    }
-    return;
-  }
-
   // Все обычные кнопки редактирования остаются внутри WeightInput.
   input.handleButton(button);
 }

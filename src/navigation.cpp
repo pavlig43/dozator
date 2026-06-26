@@ -1,18 +1,22 @@
 #include "navigation.h"
 
+void Navigation::open(ScreenId screen) {
+  requestedScreen = screen;
+}
+
 void Navigation::openWeightInput() {
   // Только запрашиваем переход. App сам выполнит exit старого и enter нового экрана.
-  requestedScreen = ScreenId::WEIGHT_INPUT;
+  open(ScreenId::WEIGHT_INPUT);
 }
 
 void Navigation::openAngleSettings() {
-  // Настройка углов открывается из экрана ввода веса по кнопке NEXT.
-  requestedScreen = ScreenId::ANGLE_SETTINGS;
+  // Настройка углов открывается через меню выбора экрана.
+  open(ScreenId::ANGLE_SETTINGS);
 }
 
 void Navigation::openWork() {
   // Рабочий экран открывается только после сохранения ненулевого целевого веса.
-  requestedScreen = ScreenId::WORK;
+  open(ScreenId::WORK);
 }
 
 ScreenId Navigation::current() const {

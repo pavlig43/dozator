@@ -13,6 +13,7 @@ enum class ScreenId : byte {
 // а App позже применяет переход через commit().
 class Navigation {
 public:
+  void open(ScreenId screen); // Запросить переход на конкретный экран.
   void openWeightInput(); // Запросить переход на ввод веса.
   void openAngleSettings(); // Запросить переход на настройку углов.
   void openWork(); // Запросить переход на рабочий экран.
@@ -23,6 +24,6 @@ public:
 private:
   // currentScreen нужен для loop/handle текущего экрана.
   // requestedScreen нужен, чтобы экран мог безопасно запросить переход во время handleButton().
-  ScreenId currentScreen = ScreenId::WEIGHT_INPUT;
-  ScreenId requestedScreen = ScreenId::WEIGHT_INPUT;
+  ScreenId currentScreen = ScreenId::WORK;
+  ScreenId requestedScreen = ScreenId::WORK;
 };

@@ -1,6 +1,16 @@
 #include <Arduino.h>
 #include "app.h"
 
+namespace {
+const ScreenId MENU_ORDER[] = {
+  ScreenId::WEIGHT_INPUT,
+  ScreenId::ANGLE_SETTINGS,
+  ScreenId::WORK
+};
+
+const byte MENU_SCREEN_COUNT = sizeof(MENU_ORDER) / sizeof(MENU_ORDER[0]);
+}
+
 App::App()
   // Здесь только связываем объекты между собой.
   // Реальная инициализация железа находится в init()/enter() нужного экрана.
@@ -23,11 +33,16 @@ void App::init() {
   // Остальное лениво инициализируют экраны при первом входе.
   display.init();
   remote.init();
-  enterCurrentScreen();
+  showMenu();
 }
 
 void App::loop() {
   const Button button = remote.read();
+
+  if (menuActive) {
+    handleMenuButton(button);
+    return;
+  }
 
   // Порядок важен: экран сначала получает кнопку и может запросить переход.
   // Потом App применяет переход, и loop() вызывается уже у актуального экрана.
@@ -38,6 +53,11 @@ void App::loop() {
 
 void App::handleButton(Button button) {
   if (button == Button::NONE) {
+    return;
+  }
+
+  if (button == Button::CONFIRM) {
+    openMenu(navigation.current());
     return;
   }
 
@@ -89,10 +109,14 @@ void App::enterCurrentScreen() {
 }
 
 void App::exitCurrentScreen() {
-  // Пока только рабочий экран имеет активные процессы, которые надо остановить:
-  // дозирование, мотор, RGB и целевой угол серво.
-  if (navigation.current() == ScreenId::WORK) {
+  if (navigation.current() == ScreenId::WEIGHT_INPUT) {
+    weightInputScreen.exit();
+  }
+  else if (navigation.current() == ScreenId::WORK) {
     workScreen.exit();
+  }
+  else if (navigation.current() == ScreenId::ANGLE_SETTINGS) {
+    angleSettingsScreen.exit();
   }
 }
 
@@ -105,5 +129,66 @@ void App::applyNavigation() {
 
   exitCurrentScreen();
   navigation.commit();
+  selectedScreen = navigation.current();
   enterCurrentScreen();
+}
+
+void App::showMenu() {
+  display.showMenu(selectedScreen);
+}
+
+void App::handleMenuButton(Button button) {
+  if (button == Button::NONE) {
+    return;
+  }
+
+  if (button == Button::PREV || button == Button::NEXT) {
+    selectMenuByButton(button);
+    showMenu();
+    return;
+  }
+
+  if (button == Button::CONFIRM) {
+    openSelectedScreen();
+  }
+}
+
+void App::openSelectedScreen() {
+  menuActive = false;
+  openScreen(selectedScreen);
+}
+
+void App::openScreen(ScreenId screen) {
+  if (screen == navigation.current()) {
+    enterCurrentScreen();
+    return;
+  }
+
+  navigation.open(screen);
+  applyNavigation();
+}
+
+void App::openMenu(ScreenId screen) {
+  exitCurrentScreen();
+  selectedScreen = screen;
+  menuActive = true;
+  showMenu();
+}
+
+void App::selectMenuByButton(Button button) {
+  selectedScreen = menuScreenByButton(selectedScreen, button);
+}
+
+ScreenId App::menuScreenByButton(ScreenId screen, Button button) {
+  for (byte i = 0; i < MENU_SCREEN_COUNT; i++) {
+    if (MENU_ORDER[i] == screen) {
+      if (button == Button::PREV) {
+        return MENU_ORDER[(i + MENU_SCREEN_COUNT - 1) % MENU_SCREEN_COUNT];
+      }
+
+      return MENU_ORDER[(i + 1) % MENU_SCREEN_COUNT];
+    }
+  }
+
+  return ScreenId::WEIGHT_INPUT;
 }

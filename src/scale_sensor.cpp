@@ -88,18 +88,13 @@ void Scale::loop() {
   addWeightSample(roundedWeight);
 }
 
-// Принимает последнее полученное показание за ноль и очищает усреднение.
-// Если HX711 ещё ни разу не ответил, тарирование выполнится при первом чтении.
-void Scale::tare() {
-  if (hasRawValue) {
-    scale.set_offset(lastRawValue);
-    lastWeightGrams = 0;
-    resetWeightAverage();
-    tareRequested = false;
-  }
-  else {
-    tareRequested = true;
-  }
+// Следующее готовое показание HX711 станет нулём.
+void Scale::requestTare() {
+  tareRequested = true;
+}
+
+bool Scale::tareDone() const {
+  return !tareRequested;
 }
 
 // Возвращает сохранённый средний вес без нового обращения к HX711.

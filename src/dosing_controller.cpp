@@ -3,7 +3,6 @@
 
 #define SMALL_REMAINING_LIMIT_GRAMS 200
 #define MEDIUM_REMAINING_LIMIT_GRAMS 400
-#define MAIN_FILL_STOP_MARGIN_GRAMS 50
 #define WAIT_TIME_MS 1000UL
 #define SLOW_FILL_TIME_MS 1000UL
 
@@ -56,7 +55,7 @@ void DosingController::loop() {
   switch (state) {
   case State::MAIN_FILL:
     // Основную подачу прекращаем заранее, потому что продукт ещё досыпается по инерции.
-    if (currentWeight >= (long)targetWeight - MAIN_FILL_STOP_MARGIN_GRAMS) {
+    if (currentWeight >= (long)targetWeight - servoMemory.stopMarginGrams()) {
       servo.setAngle(servoMemory.closedAngle());
       motor.setFilling(false);
       setState(State::WAIT);
