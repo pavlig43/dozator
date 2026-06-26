@@ -18,7 +18,7 @@ Select screen
 Экраны идут по кругу:
 
 ```text
-Weight input -> Angle setup -> Work -> Weight input
+Weight input -> Angle setup -> Calibration -> Work -> Weight input
 ```
 
 ## Экран ввода веса
@@ -49,6 +49,34 @@ OPEN ANGLE <-> CLOSED ANGLE <-> SLOW ANGLE <-> STOP WEIGHT
 
 `STOP WEIGHT` — остаток веса в граммах, при котором основная подача
 закрывает заслонку и переходит к точной досыпке.
+
+## Экран калибровки весов
+
+| Кнопка | Действие |
+|---|---|
+| `EQ` | Обнулить пустые весы |
+| `PLAY/PAUSE` | Открыть меню |
+
+Ход калибровки:
+
+```text
+Press EQ
+to zero
+```
+
+После обнуления:
+
+```text
+Put 1kg
+wait...
+```
+
+Когда груз 1 кг зафиксирован, коэффициент сохраняется в EEPROM:
+
+```text
+OK saved
+PLAY to menu
+```
 
 ## Рабочий экран
 

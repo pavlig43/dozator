@@ -5,6 +5,7 @@ namespace {
 const ScreenId MENU_ORDER[] = {
   ScreenId::WEIGHT_INPUT,
   ScreenId::ANGLE_SETTINGS,
+  ScreenId::SCALE_CALIBRATION,
   ScreenId::WORK
 };
 
@@ -18,6 +19,7 @@ App::App()
     dosing(servo, servoMemory, scale, motor, targetMemory),
     weightInputScreen(display, targetMemory, navigation),
     angleSettingsScreen(display, angleSettings, navigation),
+    scaleCalibrationScreen(display, scale),
     workScreen(display, scale, rgb, dosing, targetMemory, navigation, servo) {
 }
 
@@ -70,6 +72,10 @@ void App::handleButton(Button button) {
     angleSettingsScreen.handleButton(button);
     break;
 
+  case ScreenId::SCALE_CALIBRATION:
+    scaleCalibrationScreen.handleButton(button);
+    break;
+
   case ScreenId::WORK:
     workScreen.handleButton(button);
     break;
@@ -86,6 +92,10 @@ void App::loopCurrentScreen() {
     angleSettingsScreen.loop();
     break;
 
+  case ScreenId::SCALE_CALIBRATION:
+    scaleCalibrationScreen.loop();
+    break;
+
   case ScreenId::WORK:
     workScreen.loop();
     break;
@@ -100,6 +110,10 @@ void App::enterCurrentScreen() {
 
   case ScreenId::ANGLE_SETTINGS:
     angleSettingsScreen.enter();
+    break;
+
+  case ScreenId::SCALE_CALIBRATION:
+    scaleCalibrationScreen.enter();
     break;
 
   case ScreenId::WORK:

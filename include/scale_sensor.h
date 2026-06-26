@@ -7,6 +7,8 @@ public:
   void init(); // Настраивает HX711 и калибровочный коэффициент.
   void loop(); // Читает готовое измерение и обновляет средний вес.
   void requestTare(); // Просит принять следующее готовое измерение за ноль.
+  void calibrateWithKnownWeight(long knownWeightGrams); // Считает и сохраняет коэффициент по текущему сырому весу.
   bool tareDone() const; // true, если запрос тарирования уже выполнен.
   long weightGrams() const; // Последний усреднённый вес в граммах.
+  long rawDelta() const; // Последнее сырое показание минус ноль.
 };

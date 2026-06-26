@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 #include <HX711.h>
 #include "scale_sensor.h"
 
@@ -6,6 +7,10 @@
 #define SCALE_SCK_PIN 2
 #define SCALE_FACTOR 407.5
 #define SCALE_AVERAGE_SAMPLES 5
+// EEPROM 11 - marker, 12..15 - float с коэффициентом весов.
+#define EEPROM_SCALE_MARKER_ADDRESS 11
+#define EEPROM_SCALE_FACTOR_ADDRESS 12
+#define EEPROM_SCALE_MARKER 0xC1
 
 HX711 scale;
 
@@ -33,6 +38,9 @@ bool hasRawValue = false;
 // Требует принять ближайшее готовое показание HX711 за нулевой вес.
 bool tareRequested = true;
 
+// Текущий коэффициент HX711. Загружается из EEPROM или берётся по умолчанию.
+float scaleFactor = SCALE_FACTOR;
+
 // Очищает накопленные показания, чтобы усреднение началось заново.
 void resetWeightAverage() {
   weightSamplesSum = 0;
@@ -59,7 +67,19 @@ void addWeightSample(long weightGrams) {
 // Первое готовое показание будет принято за ноль без блокировки программы.
 void Scale::init() {
   scale.begin(SCALE_DT_PIN, SCALE_SCK_PIN);
-  scale.set_scale(SCALE_FACTOR);
+
+  if (EEPROM.read(EEPROM_SCALE_MARKER_ADDRESS) == EEPROM_SCALE_MARKER) {
+    EEPROM.get(EEPROM_SCALE_FACTOR_ADDRESS, scaleFactor);
+  }
+  else {
+    scaleFactor = SCALE_FACTOR;
+  }
+
+  if (scaleFactor == 0.0f) {
+    scaleFactor = SCALE_FACTOR;
+  }
+
+  scale.set_scale(scaleFactor);
 }
 
 // Если HX711 подготовил данные, читает одно показание и обновляет средний вес.
@@ -93,6 +113,25 @@ void Scale::requestTare() {
   tareRequested = true;
 }
 
+void Scale::calibrateWithKnownWeight(long knownWeightGrams) {
+  if (knownWeightGrams == 0) {
+    return;
+  }
+
+  scaleFactor = static_cast<float>(lastRawValue - scale.get_offset()) / static_cast<float>(knownWeightGrams);
+
+  if (scaleFactor == 0.0f) {
+    scaleFactor = SCALE_FACTOR;
+    return;
+  }
+
+  scale.set_scale(scaleFactor);
+  resetWeightAverage();
+  lastWeightGrams = knownWeightGrams;
+  EEPROM.put(EEPROM_SCALE_FACTOR_ADDRESS, scaleFactor);
+  EEPROM.update(EEPROM_SCALE_MARKER_ADDRESS, EEPROM_SCALE_MARKER);
+}
+
 bool Scale::tareDone() const {
   return !tareRequested;
 }
@@ -101,4 +140,8 @@ bool Scale::tareDone() const {
 // Это значение одновременно используют автомат дозирования и экран.
 long Scale::weightGrams() const {
   return lastWeightGrams;
+}
+
+long Scale::rawDelta() const {
+  return lastRawValue - scale.get_offset();
 }

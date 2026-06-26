@@ -9,6 +9,7 @@
 // 3    - slowAngle, угол медленной досыпки.
 // 4..8 - занято TargetMemory: marker и целевой вес.
 // 9..10 - stopMarginGrams, остаток веса для перехода к досыпке.
+// 11..15 - занято Scale: marker и коэффициент весов.
 // Углы занимают по одному байту, поэтому рабочий диапазон ограничен 10..170.
 #define EEPROM_SERVO_MARKER_ADDRESS 0
 #define EEPROM_SERVO_OPEN_ADDRESS 1

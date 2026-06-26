@@ -11,6 +11,9 @@ public:
   void showLoading(); // Экран загрузки.
   void showMenu(ScreenId selectedScreen); // Меню выбора экрана.
   void showTare(); // Короткое сообщение во время тарирования.
+  void showScaleCalibrationEq(); // Первый шаг калибровки весов.
+  void showScaleCalibrationWeight(); // Просит поставить груз 1 кг.
+  void showScaleCalibrationDone(); // Калибровка сохранена.
   void showWeightInput(const byte digits[5], byte cursor); // Полный экран ввода веса.
   void updateDigits(const byte digits[5]); // Обновляет только строку цифр.
   void updateCursor(byte cursor); // Обновляет только указатель курсора.

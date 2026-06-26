@@ -10,6 +10,7 @@
 #include "navigation.h"
 #include "rgb_led.h"
 #include "scale_sensor.h"
+#include "scale_calibration_screen.h"
 #include "servo_memory.h"
 #include "servo_motor.h"
 #include "target_memory.h"
@@ -44,6 +45,7 @@ private:
   DosingController dosing;
   WeightInputScreen weightInputScreen;
   AngleSettingsScreen angleSettingsScreen;
+  ScaleCalibrationScreen scaleCalibrationScreen;
   WorkScreen workScreen;
   bool menuActive = true; // При старте открыто меню с выбранным рабочим экраном.
   ScreenId selectedScreen = ScreenId::WORK; // Текущий пункт меню.

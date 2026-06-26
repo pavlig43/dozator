@@ -14,6 +14,10 @@ void Navigation::openAngleSettings() {
   open(ScreenId::ANGLE_SETTINGS);
 }
 
+void Navigation::openScaleCalibration() {
+  open(ScreenId::SCALE_CALIBRATION);
+}
+
 void Navigation::openWork() {
   // Рабочий экран открывается только после сохранения ненулевого целевого веса.
   open(ScreenId::WORK);

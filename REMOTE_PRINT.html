@@ -103,6 +103,13 @@
       align-items: center;
     }
 
+    .panel.calibration {
+      display: grid;
+      grid-template-columns: 260px 1fr 300px;
+      gap: 22px;
+      align-items: center;
+    }
+
     .section-head {
       display: flex;
       align-items: center;
@@ -272,7 +279,7 @@
     </aside>
 
     <section class="main">
-      <header class="title">Пульт дозатора: меню, ввод веса, настройка, работа</header>
+      <header class="title">Пульт дозатора: меню, ввод веса, настройка, калибровка, работа</header>
 
       <section class="panel menu">
         <div>
@@ -288,7 +295,7 @@
         <div class="cycle">
           <div style="color:#1b1b1b;font-size:22px;margin-bottom:10px;">Экраны по кругу:</div>
           Weight input &gt; Angle setup<br>
-          Work &gt; Weight input
+          Calibration &gt; Work &gt; Weight input
         </div>
       </section>
 
@@ -330,9 +337,28 @@
         </section>
       </section>
 
+      <section class="panel calibration">
+        <div>
+          <div class="section-head"><span class="num">4</span><span>Калибровка</span></div>
+          <div class="lcd">Press EQ
+to zero</div>
+        </div>
+        <div>
+          <div class="button-line"><span class="pill purple">EQ</span><span>-</span><span>обнулить пустые весы</span></div>
+          <div class="button-line"><span class="pill black">1 kg</span><span>-</span><span>поставить груз и ждать</span></div>
+          <div class="button-line"><span class="pill green">PLAY</span><span>-</span><span>открыть меню после OK</span></div>
+        </div>
+        <div>
+          <div class="lcd small">Put 1kg
+wait...</div>
+          <div class="lcd small" style="margin-left:10px;">OK saved
+PLAY to menu</div>
+        </div>
+      </section>
+
       <section class="panel yellow work">
         <div>
-          <div class="section-head"><span class="num">4</span><span>Работа</span></div>
+          <div class="section-head"><span class="num">5</span><span>Работа</span></div>
           <div class="lcd">CH 0
   950</div>
         </div>

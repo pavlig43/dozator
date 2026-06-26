@@ -36,6 +36,9 @@ void Display::showMenu(ScreenId selectedScreen) {
   else if (selectedScreen == ScreenId::ANGLE_SETTINGS) {
     lcd.print("> Angle setup");
   }
+  else if (selectedScreen == ScreenId::SCALE_CALIBRATION) {
+    lcd.print("> Calibration");
+  }
   else {
     lcd.print("> Work");
   }
@@ -47,6 +50,30 @@ void Display::showTare() {
   lcd.print("                ");
   lcd.setCursor(0, 0);
   lcd.print("Tare...");
+}
+
+void Display::showScaleCalibrationEq() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Press EQ");
+  lcd.setCursor(0, 1);
+  lcd.print("to zero");
+}
+
+void Display::showScaleCalibrationWeight() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Put 1kg");
+  lcd.setCursor(0, 1);
+  lcd.print("wait...");
+}
+
+void Display::showScaleCalibrationDone() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("OK saved");
+  lcd.setCursor(0, 1);
+  lcd.print("PLAY to menu");
 }
 
 // Показывает экран ввода целевого веса.
